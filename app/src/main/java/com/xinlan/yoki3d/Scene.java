@@ -1,6 +1,7 @@
 package com.xinlan.yoki3d;
 
 import com.xinlan.yoki3d.primitve.Node;
+import com.xinlan.yoki3d.render.CoreRender;
 
 /**
  * 基础场景类
@@ -18,6 +19,7 @@ public class Scene {
     }
 
     public void update() {
+        CoreRender.getInstance().clearRenderList();
         mRoot.visit();
     }
 }//end class

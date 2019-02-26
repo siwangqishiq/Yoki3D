@@ -10,7 +10,6 @@ import com.xinlan.yoki3d.render.CoreRender;
 import com.xinlan.yoki3d.utils.OpenglEsUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -35,10 +34,14 @@ public class MainView extends GLSurfaceView implements GLSurfaceView.Renderer {
     protected Scene mCurrentScene;
     protected List<Scene> mScenes = new ArrayList<Scene>();
 
-    private IMainView mCustomAction;
+    private ViewCallback mCustomAction;
 
-    public void setCustionAction(IMainView action) {
+    public void setCustionAction(ViewCallback action) {
         this.mCustomAction = action;
+        startRender();
+    }
+
+    public void startRender() {
         setRenderer(this);
         setRenderMode(RENDERMODE_CONTINUOUSLY);
     }

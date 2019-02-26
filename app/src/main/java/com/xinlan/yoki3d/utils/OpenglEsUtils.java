@@ -58,9 +58,6 @@ public class OpenglEsUtils {
         }
     }
 
-
-
-
     public static FloatBuffer allocateBuf(float array[]) {
         ByteBuffer bb = ByteBuffer.allocateDirect(array.length * Float.BYTES)
                 .order(ByteOrder.nativeOrder());
@@ -76,6 +73,23 @@ public class OpenglEsUtils {
         bb.put(array);
         bb.position(0);
         return bb;
+    }
+
+    public static float[] convertColor(int r , int g , int b , int a){
+        float[] colors = new float[4];
+        colors[0] = clamp(0.0f, 1.0f, r / 255);
+        colors[1] = clamp(0.0f, 1.0f, g / 255);
+        colors[2] = clamp(0.0f, 1.0f, b / 255);
+        colors[3] = clamp(0.0f, 1.0f, a / 255);
+        return colors;
+    }
+
+    public static float clamp(float min, float max, float v) {
+        if(v <= min)
+            return min;
+        if(v >= max)
+            return max;
+        return v;
     }
 
 }//end class

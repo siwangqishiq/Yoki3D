@@ -1,6 +1,6 @@
 package com.xinlan.yoki3d.view;
 
-public interface IMainView {
+public interface ViewCallback {
     void init(MainView ctx);
 
     void beforeOnDraw(MainView ctx);

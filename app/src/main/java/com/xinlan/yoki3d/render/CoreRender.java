@@ -5,6 +5,7 @@ import android.opengl.GLES20;
 import android.opengl.GLES30;
 
 import com.xinlan.yoki3d.MatrixState;
+import com.xinlan.yoki3d.utils.OpenglEsUtils;
 
 import java.util.ArrayList;
 
@@ -36,16 +37,10 @@ public final class CoreRender {
     }
 
     public void setRefreshColor(float r, float g, float b, float a) {
-        mRefreshColorR = clamp(0.0f, 1.0f, r / 255);
-        mRefreshColorG = clamp(0.0f, 1.0f, g / 255);
-        mRefreshColorB = clamp(0.0f, 1.0f, b / 255);
-        mRefreshColorA = clamp(0.0f, 1.0f, a / 255);
-
-        GLES30.glClearColor(mRefreshColorR, mRefreshColorG, mRefreshColorB, mRefreshColorA);
-    }
-
-    private float clamp(float min, float max, float v) {
-        return Math.max(max, Math.min(min, v));
+        mRefreshColorR = OpenglEsUtils.clamp(0.0f, 1.0f, r / 255);
+        mRefreshColorG = OpenglEsUtils.clamp(0.0f, 1.0f, g / 255);
+        mRefreshColorB = OpenglEsUtils.clamp(0.0f, 1.0f, b / 255);
+        mRefreshColorA = OpenglEsUtils.clamp(0.0f, 1.0f, a / 255);
     }
 
     public void clearRenderList() {
@@ -60,13 +55,14 @@ public final class CoreRender {
     }
 
     public void onViewResize(int w, int h) {
+        GLES30.glClearColor(mRefreshColorR, mRefreshColorG, mRefreshColorB, mRefreshColorA);
         mViewWidth = w;
         mViewHeight = h;
 
         mRatio = mViewWidth / mViewHeight;
 
-        MatrixState.setCamera(0, 0, 0,
-                0, 0, 10,
+        MatrixState.setCamera(0, 0, 2,
+                0, 0, 0,
                 0, 1, 0);
 
         GLES30.glViewport(0, 0, mViewWidth, mViewHeight);
@@ -74,6 +70,8 @@ public final class CoreRender {
         MatrixState.setProjectFrustum(-mRatio, mRatio,
                 -1, 1,
                 1, 100);
+
+        MatrixState.setInitStack();
     }
 
     public void render() {
