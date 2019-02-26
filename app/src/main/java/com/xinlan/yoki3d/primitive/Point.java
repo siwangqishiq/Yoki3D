@@ -1,4 +1,4 @@
-package com.xinlan.yoki3d.primitve;
+package com.xinlan.yoki3d.primitive;
 
 import android.opengl.GLES20;
 import android.opengl.GLES30;

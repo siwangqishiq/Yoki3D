@@ -7,10 +7,10 @@ import android.view.WindowManager;
 
 import com.xinlan.yoki3d.YokiHelper;
 import com.xinlan.yoki3d.primitive.Point;
-import com.xinlan.yoki3d.view.ViewCallback;
 import com.xinlan.yoki3d.view.MainView;
+import com.xinlan.yoki3d.view.ViewCallback;
 
-public class MainActivity extends Activity implements ViewCallback {
+public class LineTestActivity extends Activity implements ViewCallback {
     private MainView mMainView;
 
     @Override
@@ -42,20 +42,6 @@ public class MainActivity extends Activity implements ViewCallback {
 
     @Override
     public void init(MainView ctx) {
-
-        for (float i = 0; i < 2; i += 0.01f) {
-            Point p1 = new Point();
-            p1.setColor(255, 255, 0);
-            p1.setSize(100*i + 1);
-            p1.setPosition(i, i, 0);
-            ctx.addChild(p1);
-        }//end for i
-
-        Point p2 = new Point();
-        p2.setColor(255, 255, 255);
-        p2.setSize(10);
-        p2.setPosition(0, 1, 0);
-        ctx.addChild(p2);
 
     }
 

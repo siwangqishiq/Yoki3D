@@ -1,6 +1,6 @@
 package com.xinlan.yoki3d;
 
-import com.xinlan.yoki3d.primitve.Node;
+import com.xinlan.yoki3d.primitive.Node;
 import com.xinlan.yoki3d.render.CoreRender;
 
 /**

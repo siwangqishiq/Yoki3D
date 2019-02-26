@@ -1,4 +1,4 @@
-package com.xinlan.yoki3d.primitve;
+package com.xinlan.yoki3d.primitive;
 
 /**
  * 加载自定义obj模型

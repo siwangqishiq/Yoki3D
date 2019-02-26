@@ -5,7 +5,7 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
 import com.xinlan.yoki3d.Scene;
-import com.xinlan.yoki3d.primitve.Node;
+import com.xinlan.yoki3d.primitive.Node;
 import com.xinlan.yoki3d.render.CoreRender;
 import com.xinlan.yoki3d.utils.OpenglEsUtils;
 

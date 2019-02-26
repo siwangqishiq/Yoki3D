@@ -1,4 +1,4 @@
-package com.xinlan.yoki3d.primitve;
+package com.xinlan.yoki3d.primitive;
 
 import com.xinlan.yoki3d.render.CoreRender;
 import com.xinlan.yoki3d.render.IRender;
