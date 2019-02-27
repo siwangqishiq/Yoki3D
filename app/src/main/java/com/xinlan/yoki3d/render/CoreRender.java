@@ -63,7 +63,7 @@ public final class CoreRender {
 
     public void onViewResize(int w, int h) {
         GLES30.glClearColor(mRefreshColorR, mRefreshColorG, mRefreshColorB, mRefreshColorA);
-        //GLES30.glClearColor(1, 1, 0, 1);
+        //GLES30.glClearColor(0, 0, 0, 0f);
         mViewWidth = w;
         mViewHeight = h;
 

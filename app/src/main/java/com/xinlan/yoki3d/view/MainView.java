@@ -39,6 +39,8 @@ public class MainView extends GLSurfaceView implements GLSurfaceView.Renderer {
         setEGLContextClientVersion(3);
         setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         getHolder().setFormat(PixelFormat.TRANSLUCENT);
+        //getHolder().setFormat(PixelFormat.RGBA_8888);
+        this.setZOrderOnTop(true);
     }
 
     protected Scene mCurrentScene;

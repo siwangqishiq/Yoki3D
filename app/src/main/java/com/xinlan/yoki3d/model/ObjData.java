@@ -14,14 +14,12 @@ public class ObjData {
 
     public float[] convertVertexListToArray() {
         float[] vs = new float[3 * vertexList.size()];
-
         for (int i = 0, len = vertexList.size(); i < len; i++) {
             Vec3 v = vertexList.get(i);
             vs[3 * i + 0] = v.x;
             vs[3 * i + 1] = v.y;
             vs[3 * i + 2] = v.z;
         }//end for i
-
         return vs;
     }
 }//end class

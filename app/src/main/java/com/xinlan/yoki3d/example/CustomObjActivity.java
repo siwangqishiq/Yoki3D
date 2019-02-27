@@ -40,8 +40,8 @@ public class CustomObjActivity extends Activity implements ViewCallback {
 
     @Override
     public void init(MainView ctx) {
-        CustomObj obj = new CustomObj("chahu.obj");
-        obj.setPosition(0, -2, -25);
+        CustomObj obj = new CustomObj("ch.obj");
+        obj.setPosition(0, -2, -20);
         ctx.addChild(obj);
     }
 

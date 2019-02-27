@@ -42,7 +42,10 @@ public class LoadUtil {
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             String readLineContent = null;
 
-            List<Vec3> vBankList = new ArrayList<Vec3>();
+            List<Vec3> vertexBank = new ArrayList<Vec3>();
+            List<Vec3> normalBank = new ArrayList<Vec3>();
+            List<Vec3> textureBank = new ArrayList<Vec3>();
+
             //扫面文件，根据行类型的不同执行不同的处理逻辑
             while ((readLineContent = bufferedReader.readLine()) != null) {
                 if(TextUtils.isEmpty(readLineContent))
@@ -57,25 +60,33 @@ public class LoadUtil {
                     Vec3 v = new Vec3(Float.parseFloat(contents[1]) ,
                             Float.parseFloat(contents[2]),
                             Float.parseFloat(contents[3]));
-                    vBankList.add(v);
+                    vertexBank.add(v);
+                } else if(typeValue.trim().equals("vn")){
+                    Vec3 v = new Vec3(Float.parseFloat(contents[1]) ,
+                            Float.parseFloat(contents[2]),
+                            Float.parseFloat(contents[3]));
+                    normalBank.add(v);
+                } else if(typeValue.trim().equals("vt")){
+                    Vec3 v = new Vec3(Float.parseFloat(contents[1]) ,
+                            Float.parseFloat(contents[2]),
+                            Float.parseFloat(contents[3]));
+                    textureBank.add(v);
                 } else if (typeValue.trim().equals("f")) {//此行为三角形面
                     //f 1/2/3 2/3/4 3/4/5
-
                     String face1 = contents[1];
                     String[] face1Strs = face1.split("/");
                     int point1Index = Integer.parseInt(face1Strs[0]) - 1;
+                    objData.vertexList.add(vertexBank.get(point1Index));
 
                     String face2 = contents[2];
                     String[] face2Strs = face2.split("/");
                     int point2Index = Integer.parseInt(face2Strs[0]) - 1;
+                    objData.vertexList.add(vertexBank.get(point2Index));
 
                     String face3 = contents[3];
                     String[] face3Strs = face3.split("/");
                     int point3Index = Integer.parseInt(face3Strs[0]) - 1;
-
-                    objData.vertexList.add(vBankList.get(point1Index));
-                    objData.vertexList.add(vBankList.get(point2Index));
-                    objData.vertexList.add(vBankList.get(point3Index));
+                    objData.vertexList.add(vertexBank.get(point3Index));
                 }
             }//end while
         } catch (Exception e) {
