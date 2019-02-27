@@ -1,16 +1,59 @@
 package com.xinlan.yoki3d.primitive;
 
+import android.opengl.GLES20;
+import android.opengl.GLES30;
+
+import com.xinlan.yoki3d.MatrixState;
+import com.xinlan.yoki3d.R;
+import com.xinlan.yoki3d.YokiHelper;
+import com.xinlan.yoki3d.model.ObjData;
+import com.xinlan.yoki3d.render.CoreRender;
+import com.xinlan.yoki3d.utils.LoadUtil;
+import com.xinlan.yoki3d.utils.OpenglEsUtils;
+import com.xinlan.yoki3d.utils.ShaderUtil;
+
+import java.nio.FloatBuffer;
+
 /**
  * 加载自定义obj模型
- *
  */
 public class CustomObj extends RenderNode {
 
-    public CustomObj(String filename){
+    protected FloatBuffer mVertexBuf;//顶点数组
+    protected int mVertexCount;
+    protected ObjData mObjData;
 
+    protected float x, y, z;
+
+    public CustomObj(String objFilename) {
+        mProgramId = ShaderUtil.buildShaderProgram(R.raw.custom_obj_vertex, R.raw.custom_obj_frg);
+        mUniformMvpMatrixLoc = GLES30.glGetUniformLocation(mProgramId, "uMvpMatrix");
+
+        mObjData = LoadUtil.loadObjFromAsset(objFilename, YokiHelper.ctx.getResources());
+
+        mVertexBuf = OpenglEsUtils.allocateBuf(mObjData.convertVertexListToArray());
+        mVertexCount = mObjData.vertexList.size();
     }
 
-    public CustomObj(){
+    public void setPosition(float _x, float _y, float _z) {
+        this.x = _x;
+        this.y = _y;
+        this.z = _z;
+    }
 
+    public void render() {
+        MatrixState.pushMatrix();
+        GLES30.glUseProgram(mProgramId);
+        MatrixState.translate(x, y, z);
+
+        //绕Y轴、X轴旋转
+        MatrixState.rotate(CoreRender.getInstance().yAngle, 0, 1, 0);
+        MatrixState.rotate(CoreRender.getInstance().xAngle, 1, 0, 0);
+
+        GLES30.glUniformMatrix4fv(mUniformMvpMatrixLoc, 1, false, MatrixState.getFinalMatrix(), 0);
+        GLES30.glVertexAttribPointer(0, 3, GLES30.GL_FLOAT, false, 0, mVertexBuf);
+        GLES30.glEnableVertexAttribArray(0);
+        GLES30.glDrawArrays(GLES20.GL_TRIANGLES , 0 , mVertexCount);
+        MatrixState.popMatrix();
     }
 }//end class

@@ -26,10 +26,17 @@ public final class CoreRender {
     private int mViewHeight;
     private float mRatio;
 
-    public static CoreRender render = new CoreRender();
+    public float yAngle;//绕Y轴旋转的角度
+    public float xAngle; //绕X轴旋转的角度
 
+    private static ThreadLocal<CoreRender> mInstances = new ThreadLocal<CoreRender>();
+
+    //public static CoreRender render = new CoreRender();
     public static CoreRender getInstance() {
-        return render;
+        if (mInstances.get() == null) {
+            mInstances.set(new CoreRender());
+        }
+        return mInstances.get();
     }
 
     private CoreRender() {
@@ -56,13 +63,14 @@ public final class CoreRender {
 
     public void onViewResize(int w, int h) {
         GLES30.glClearColor(mRefreshColorR, mRefreshColorG, mRefreshColorB, mRefreshColorA);
+        //GLES30.glClearColor(1, 1, 0, 1);
         mViewWidth = w;
         mViewHeight = h;
 
-        mRatio = mViewWidth / mViewHeight;
+        mRatio = (float) mViewWidth / mViewHeight;
 
-        MatrixState.setCamera(0, 0, 2,
-                0, 0, 0,
+        MatrixState.setCamera(0, 0, 0,
+                0, 0, -1,
                 0, 1, 0);
 
         GLES30.glViewport(0, 0, mViewWidth, mViewHeight);

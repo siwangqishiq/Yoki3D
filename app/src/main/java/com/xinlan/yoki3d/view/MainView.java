@@ -1,8 +1,10 @@
 package com.xinlan.yoki3d.view;
 
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 
 import com.xinlan.yoki3d.Scene;
 import com.xinlan.yoki3d.primitive.Node;
@@ -16,6 +18,13 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 public class MainView extends GLSurfaceView implements GLSurfaceView.Renderer {
+    private final float TOUCH_SCALE_FACTOR = 180.0f / 320;//角度缩放比例
+
+    private float mPreviousY;//上次的触控位置Y坐标
+    private float mPreviousX;//上次的触控位置X坐标
+
+    private CoreRender mRender;
+
     public MainView(Context context) {
         super(context);
         initView(context);
@@ -29,6 +38,7 @@ public class MainView extends GLSurfaceView implements GLSurfaceView.Renderer {
     protected void initView(Context context) {
         setEGLContextClientVersion(3);
         setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+        getHolder().setFormat(PixelFormat.TRANSLUCENT);
     }
 
     protected Scene mCurrentScene;
@@ -58,6 +68,7 @@ public class MainView extends GLSurfaceView implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+        mRender = CoreRender.getInstance();
         mCurrentScene = new Scene();
 
         if (mCustomAction != null) {
@@ -96,6 +107,26 @@ public class MainView extends GLSurfaceView implements GLSurfaceView.Renderer {
 
     public Scene getCurrentScene() {
         return mCurrentScene;
+    }
+
+    //触摸事件回调方法
+    @Override
+    public boolean onTouchEvent(MotionEvent e) {
+        float y = e.getY();
+        float x = e.getX();
+        switch (e.getAction()) {
+            case MotionEvent.ACTION_MOVE:
+                float dy = y - mPreviousY;//计算触控笔Y位移
+                float dx = x - mPreviousX;//计算触控笔X位移
+                if (mRender != null) {
+                    mRender.yAngle += dx * TOUCH_SCALE_FACTOR;//设置沿y轴旋转角度
+                    mRender.xAngle += dy * TOUCH_SCALE_FACTOR;//设置沿x轴旋转角度
+                }
+                //requestRender();//重绘画面
+        }
+        mPreviousY = y;//记录触控笔位置
+        mPreviousX = x;//记录触控笔位置
+        return true;
     }
 
 }//end class

@@ -6,7 +6,10 @@ import com.xinlan.yoki3d.utils.ShaderUtil;
 public class YokiHelper {
     public static final String TAG = "YokiHelper";
 
+    public static Application ctx;
+
     public static void init(Application context) {
+        ctx = context;
         ShaderUtil.ctx = context;
     }
 
