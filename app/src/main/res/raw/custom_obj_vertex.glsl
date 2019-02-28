@@ -3,56 +3,59 @@
 uniform mat4 uMvpMatrix;
 uniform mat4 uModelMatrix;
 uniform vec3 uLightPos;
-uniform vec3 uCamera;
+uniform vec3 uCameraPos;
 
 layout(location = 0) in vec3 aPos;
-layout(location = 1) in vec3 aNormal;
+layout(location = 1) in vec2 aCoord;
+layout(location = 2) in vec3 aNormal;
 
+out vec2 vCoord;
 out vec4 vAmbient;
 out vec4 vDiffuse;
 out vec4 vSpecular;
 
+const float shininess = 50.0;//粗糙度
+
 void pointLight(in vec3 normal,
-    inout vec4 ambient,
-    inout vec4 diffuse,
-    inout vec4 specular,
-    in vec3 lightLocation,
-    in vec4 lightAmbient,
-    in vec4 lightDiffuse,
-    in vec4 lightSpecular){
+                in vec4 ambient ,
+                in vec4 diffuse ,
+                in vec4 specular,
+                inout vec4 outAmbient ,
+                inout vec4 outDiffuse ,
+                inout vec4 outSepcular){
+    outAmbient = ambient;
 
+    vec3 normalTarget = aPos + normal;
+    vec3 newNormal = (uModelMatrix * vec4(normalTarget.xyz , 1.0f) - uModelMatrix * vec4(aPos.xyz , 1)).xyz;
+    newNormal = normalize(newNormal);
+    vec3 eye = normalize(uCameraPos - (uModelMatrix * vec4(aPos , 1.0f)).xyz);
+    vec3 vp = normalize(uLightPos - (uModelMatrix * vec4(aPos , 1.0f)).xyz);
+    vec3 halfVec = normalize(eye + vp);
+    float nDotViewPos = max(0.0f , dot(newNormal , vp));
+    outDiffuse = diffuse * nDotViewPos;
+
+    float nDotViewHalfVec = dot(newNormal , halfVec);
+    float powerFactor = max(0.0f , pow(nDotViewHalfVec , shininess));
+    outSepcular = specular * powerFactor;
 }
-
-void pointLight(					//定位光光照计算的方法
-  in vec3 normal,				//法向量
-  inout vec4 ambient,			//环境光最终强度
-  inout vec4 diffuse,				//散射光最终强度
-  inout vec4 specular,			//镜面光最终强度
-  in vec3 lightLocation,			//光源位置
-  in vec4 lightAmbient,			//环境光强度
-  in vec4 lightDiffuse,			//散射光强度
-  in vec4 lightSpecular			//镜面光强度
-){
-  ambient=lightAmbient;			//直接得出环境光的最终强度
-  vec3 normalTarget=aPosition+normal;	//计算变换后的法向量
-  vec3 newNormal=(uMMatrix*vec4(normalTarget,1)).xyz-(uMMatrix*vec4(aPosition,1)).xyz;
-  newNormal=normalize(newNormal); 	//对法向量规格化
-  //计算从表面点到摄像机的向量
-  vec3 eye= normalize(uCamera-(uMMatrix*vec4(aPosition,1)).xyz);
-  //计算从表面点到光源位置的向量vp
-  vec3 vp= normalize(lightLocation-(uMMatrix*vec4(aPosition,1)).xyz);
-  vp=normalize(vp);//格式化vp
-  vec3 halfVector=normalize(vp+eye);	//求视线与光线的半向量
-  float shininess=50.0;				//粗糙度，越小越光滑
-  float nDotViewPosition=max(0.0,dot(newNormal,vp)); 	//求法向量与vp的点积与0的最大值
-  diffuse=lightDiffuse*nDotViewPosition;				//计算散射光的最终强度
-  float nDotViewHalfVector=dot(newNormal,halfVector);	//法线与半向量的点积
-  float powerFactor=max(0.0,pow(nDotViewHalfVector,shininess)); 	//镜面反射光强度因子
-  specular=lightSpecular*powerFactor;    			//计算镜面光的最终强度
-}
-
-
 
 void main(){
     gl_Position = uMvpMatrix * vec4(aPos.xyz , 1.0f);
+    vCoord = aCoord;
+
+    vec4 ambientTmp;
+    vec4 diffuseTmp;
+    vec4 specularTmp;
+
+    pointLight(aNormal,
+                vec4(0.15f,0.15f,0.15f,1.0f),
+                vec4(0.4f,0.4f,0.4f,1.0f),
+                vec4(0.9f,0.9f,0.9f,1.0f),
+                ambientTmp,
+                diffuseTmp,
+                specularTmp
+    );
+    vAmbient = ambientTmp;
+    vDiffuse = diffuseTmp;
+    vSpecular = specularTmp;
 }

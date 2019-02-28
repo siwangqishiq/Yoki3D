@@ -58,7 +58,7 @@ public class Point extends RenderNode{
     public void render() {
         GLES30.glUseProgram(mProgramId);
         GLES30.glUniformMatrix4fv(mUniformMvpMatrixLoc ,
-                1 , false , MatrixState.getFinalMatrix() , 0);
+                1 , false , MatrixState.getInstance().getFinalMatrix() , 0);
         GLES30.glVertexAttribPointer(0 ,4 ,  GLES20.GL_FLOAT , false , 0 , mColorBuf);
         GLES30.glEnableVertexAttribArray(0);
         GLES30.glVertexAttribPointer(1 ,3 ,  GLES20.GL_FLOAT ,false ,  0 , mPositionBuf);

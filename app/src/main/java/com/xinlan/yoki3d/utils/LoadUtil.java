@@ -5,12 +5,11 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.xinlan.yoki3d.model.ObjData;
+import com.xinlan.yoki3d.model.Vec2;
 import com.xinlan.yoki3d.model.Vec3;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,11 +43,11 @@ public class LoadUtil {
 
             List<Vec3> vertexBank = new ArrayList<Vec3>();
             List<Vec3> normalBank = new ArrayList<Vec3>();
-            List<Vec3> textureBank = new ArrayList<Vec3>();
+            List<Vec2> textureBank = new ArrayList<Vec2>();
 
             //扫面文件，根据行类型的不同执行不同的处理逻辑
             while ((readLineContent = bufferedReader.readLine()) != null) {
-                if(TextUtils.isEmpty(readLineContent))
+                if (TextUtils.isEmpty(readLineContent))
                     continue;
 
                 //System.out.println(readLineContent);
@@ -57,40 +56,52 @@ public class LoadUtil {
                 String typeValue = contents[0];
                 if (typeValue.trim().equals("v")) {//此行为顶点坐标
                     //若为顶点坐标行则提取出此顶点的XYZ坐标添加到原始顶点坐标列表中
-                    Vec3 v = new Vec3(Float.parseFloat(contents[1]) ,
+                    Vec3 v = new Vec3(Float.parseFloat(contents[1]),
                             Float.parseFloat(contents[2]),
                             Float.parseFloat(contents[3]));
                     vertexBank.add(v);
-                } else if(typeValue.trim().equals("vn")){
-                    Vec3 v = new Vec3(Float.parseFloat(contents[1]) ,
+                } else if (typeValue.trim().equals("vn")) {
+                    Vec3 v = new Vec3(Float.parseFloat(contents[1]),
                             Float.parseFloat(contents[2]),
                             Float.parseFloat(contents[3]));
                     normalBank.add(v);
-                } else if(typeValue.trim().equals("vt")){
-                    Vec3 v = new Vec3(Float.parseFloat(contents[1]) ,
-                            Float.parseFloat(contents[2]),
-                            Float.parseFloat(contents[3]));
+                } else if (typeValue.trim().equals("vt")) {
+                    Vec2 v = new Vec2(Float.parseFloat(contents[1]),
+                            1 - Float.parseFloat(contents[2]));
                     textureBank.add(v);
                 } else if (typeValue.trim().equals("f")) {//此行为三角形面
-                    //f 1/2/3 2/3/4 3/4/5
+                    //
                     String face1 = contents[1];
                     String[] face1Strs = face1.split("/");
                     int point1Index = Integer.parseInt(face1Strs[0]) - 1;
                     objData.vertexList.add(vertexBank.get(point1Index));
+                    int texCoord1Index = Integer.parseInt(face1Strs[1]) - 1;
+                    objData.textureCoordList.add(textureBank.get(texCoord1Index));
+                    int normal1Index = Integer.parseInt(face1Strs[2]) - 1;
+                    objData.normalList.add(normalBank.get(normal1Index));
 
                     String face2 = contents[2];
                     String[] face2Strs = face2.split("/");
                     int point2Index = Integer.parseInt(face2Strs[0]) - 1;
                     objData.vertexList.add(vertexBank.get(point2Index));
+                    int texCoord2Index = Integer.parseInt(face2Strs[1]) - 1;
+                    objData.textureCoordList.add(textureBank.get(texCoord2Index));
+                    int normal2Index = Integer.parseInt(face2Strs[2]) - 1;
+                    objData.normalList.add(normalBank.get(normal2Index));
+
 
                     String face3 = contents[3];
                     String[] face3Strs = face3.split("/");
                     int point3Index = Integer.parseInt(face3Strs[0]) - 1;
                     objData.vertexList.add(vertexBank.get(point3Index));
+                    int texCoord3Index = Integer.parseInt(face3Strs[1]) - 1;
+                    objData.textureCoordList.add(textureBank.get(texCoord3Index));
+                    int normal3Index = Integer.parseInt(face3Strs[2]) - 1;
+                    objData.normalList.add(normalBank.get(normal3Index));
                 }
             }//end while
         } catch (Exception e) {
-            Log.d("load error", "load error");
+            Log.d("load obj file error", "load error");
             e.printStackTrace();
         }
         return objData;

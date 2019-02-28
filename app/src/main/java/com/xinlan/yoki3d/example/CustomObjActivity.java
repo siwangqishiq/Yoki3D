@@ -19,11 +19,9 @@ public class CustomObjActivity extends Activity implements ViewCallback {
         YokiHelper.init(getApplication());
         setContentView(R.layout.activity_customobj);
         mMainView = new MainView(this);
-        mMainView.setRefreshColor(0, 0, 0, 0);
-        //setContentView(mMainView);
-
-        mMainView.setCustionAction(this);
-        ((ViewGroup) getWindow().getDecorView()).addView(mMainView, 300, 300);
+        mMainView.setRefreshColor(0, 0, 0, 255);
+        setContentView(mMainView);
+        mMainView.setCustomAction(this);
     }
 
     @Override
@@ -40,8 +38,8 @@ public class CustomObjActivity extends Activity implements ViewCallback {
 
     @Override
     public void init(MainView ctx) {
-        CustomObj obj = new CustomObj("ch.obj");
-        obj.setPosition(0, -2, -20);
+        CustomObj obj = new CustomObj("ch_n_t.obj", R.drawable.texture3);
+        obj.setPosition(0, -20, -70);
         ctx.addChild(obj);
     }
 

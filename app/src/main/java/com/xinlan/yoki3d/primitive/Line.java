@@ -1,7 +1,5 @@
 package com.xinlan.yoki3d.primitive;
 
-import com.xinlan.yoki3d.utils.OpenglEsUtils;
-
 import java.nio.ByteBuffer;
 
 public class Line extends RenderNode{

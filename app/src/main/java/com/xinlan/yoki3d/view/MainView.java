@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 import com.xinlan.yoki3d.Scene;
@@ -17,13 +18,12 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-public class MainView extends GLSurfaceView implements GLSurfaceView.Renderer {
+public class MainView extends GLSurfaceView implements GLSurfaceView.Renderer, GestureDetector.OnGestureListener {
     private final float TOUCH_SCALE_FACTOR = 180.0f / 320;//角度缩放比例
 
-    private float mPreviousY;//上次的触控位置Y坐标
-    private float mPreviousX;//上次的触控位置X坐标
-
     private CoreRender mRender;
+    private GestureDetector mGestureDetect;
+    private GestureDetector.OnGestureListener mGestureListener;
 
     public MainView(Context context) {
         super(context);
@@ -35,7 +35,15 @@ public class MainView extends GLSurfaceView implements GLSurfaceView.Renderer {
         initView(context);
     }
 
+    public void setGestureListener(GestureDetector.OnGestureListener listener) {
+        if (mGestureListener != listener) {
+            mGestureListener = listener;
+        }
+    }
+
     protected void initView(Context context) {
+        mGestureDetect = new GestureDetector(context, this);
+
         setEGLContextClientVersion(3);
         setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         getHolder().setFormat(PixelFormat.TRANSLUCENT);
@@ -48,7 +56,7 @@ public class MainView extends GLSurfaceView implements GLSurfaceView.Renderer {
 
     private ViewCallback mCustomAction;
 
-    public void setCustionAction(ViewCallback action) {
+    public void setCustomAction(ViewCallback action) {
         this.mCustomAction = action;
         startRender();
     }
@@ -71,6 +79,8 @@ public class MainView extends GLSurfaceView implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         mRender = CoreRender.getInstance();
+        CoreRender.getInstance().onCreate();
+
         mCurrentScene = new Scene();
 
         if (mCustomAction != null) {
@@ -114,21 +124,53 @@ public class MainView extends GLSurfaceView implements GLSurfaceView.Renderer {
     //触摸事件回调方法
     @Override
     public boolean onTouchEvent(MotionEvent e) {
-        float y = e.getY();
-        float x = e.getX();
-        switch (e.getAction()) {
-            case MotionEvent.ACTION_MOVE:
-                float dy = y - mPreviousY;//计算触控笔Y位移
-                float dx = x - mPreviousX;//计算触控笔X位移
-                if (mRender != null) {
-                    mRender.yAngle += dx * TOUCH_SCALE_FACTOR;//设置沿y轴旋转角度
-                    mRender.xAngle += dy * TOUCH_SCALE_FACTOR;//设置沿x轴旋转角度
-                }
-                //requestRender();//重绘画面
-        }
-        mPreviousY = y;//记录触控笔位置
-        mPreviousX = x;//记录触控笔位置
+        return mGestureDetect.onTouchEvent(e);
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
         return true;
     }
 
+    @Override
+    public void onShowPress(MotionEvent e) {
+        if (mGestureListener != null) {
+            mGestureListener.onShowPress(e);
+        }
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        if (mGestureListener != null) {
+            return mGestureListener.onSingleTapUp(e);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        if (mRender != null) {
+            mRender.yAngle += distanceX * TOUCH_SCALE_FACTOR;//设置沿y轴旋转角度
+            mRender.xAngle += distanceY * TOUCH_SCALE_FACTOR;//设置沿x轴旋转角度
+        }
+        if (mGestureListener != null) {
+            return mGestureListener.onScroll(e1, e2, distanceX, distanceY);
+        }
+        return true;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+        if (mGestureListener != null) {
+            mGestureListener.onLongPress(e);
+        }
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        if (mGestureListener != null) {
+            return mGestureListener.onFling(e1, e2, velocityX, velocityY);
+        }
+        return false;
+    }
 }//end class

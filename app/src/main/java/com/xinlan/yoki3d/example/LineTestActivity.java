@@ -25,7 +25,7 @@ public class LineTestActivity extends Activity implements ViewCallback {
         mMainView.setRefreshColor(0, 0, 0, 255);
 
         setContentView(mMainView);
-        mMainView.setCustionAction(this);
+        mMainView.setCustomAction(this);
     }
 
     @Override

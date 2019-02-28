@@ -1,6 +1,5 @@
 package com.xinlan.yoki3d.render;
 
-import android.graphics.Matrix;
 import android.opengl.GLES20;
 import android.opengl.GLES30;
 
@@ -17,10 +16,10 @@ import java.util.ArrayList;
 public final class CoreRender {
     private ArrayList<IRender> mRenderList = new ArrayList<IRender>();
 
-    private float mRefreshColorR = 0.0f;
-    private float mRefreshColorG = 0.0f;
-    private float mRefreshColorB = 0.0f;
-    private float mRefreshColorA = 0.0f;
+    private static float mRefreshColorR = 0.0f;
+    private static float mRefreshColorG = 0.0f;
+    private static float mRefreshColorB = 0.0f;
+    private static float mRefreshColorA = 0.0f;
 
     private int mViewWidth;
     private int mViewHeight;
@@ -61,34 +60,39 @@ public final class CoreRender {
         mRenderList.add(renderCmd);
     }
 
-    public void onViewResize(int w, int h) {
+    public void onCreate(){
         GLES30.glClearColor(mRefreshColorR, mRefreshColorG, mRefreshColorB, mRefreshColorA);
-        //GLES30.glClearColor(0, 0, 0, 0f);
+        GLES30.glEnable(GLES20.GL_DEPTH_TEST);//打开深度测试
+        //GLES30.glEnable(GLES30.GL_CULL_FACE);//背面裁剪
+    }
+
+    public void onViewResize(int w, int h) {
+        //GLES30.glClearColor(0, 0, 0, 1f);
         mViewWidth = w;
         mViewHeight = h;
 
         mRatio = (float) mViewWidth / mViewHeight;
 
-        MatrixState.setCamera(0, 0, 0,
+        MatrixState.getInstance().setCamera(0, 0, 0,
                 0, 0, -1,
                 0, 1, 0);
 
         GLES30.glViewport(0, 0, mViewWidth, mViewHeight);
 
-        MatrixState.setProjectFrustum(-mRatio, mRatio,
+        MatrixState.getInstance().setProjectFrustum(-mRatio, mRatio,
                 -1, 1,
-                1, 100);
+                1, 400);
 
-        MatrixState.setInitStack();
+        MatrixState.getInstance().setInitStack();
     }
 
     public void render() {
         GLES30.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-        MatrixState.pushMatrix();
+        MatrixState.getInstance().pushMatrix();
         for (IRender cmd : mRenderList) {
             cmd.render();
         }//end for each
-        MatrixState.popMatrix();
+        MatrixState.getInstance().popMatrix();
     }
 }//end class
