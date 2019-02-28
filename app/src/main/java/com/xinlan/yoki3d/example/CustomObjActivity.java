@@ -38,8 +38,9 @@ public class CustomObjActivity extends Activity implements ViewCallback {
 
     @Override
     public void init(MainView ctx) {
-        CustomObj obj = new CustomObj("ch_n_t.obj", R.drawable.texture3);
-        obj.setPosition(0, -20, -70);
+        //CustomObj obj = new CustomObj("ch_n_t.obj", R.drawable.texture3);
+        CustomObj obj = new CustomObj("camaro.obj", R.drawable.camaro);
+        obj.setPosition(0, 0, -5);
         ctx.addChild(obj);
     }
 
