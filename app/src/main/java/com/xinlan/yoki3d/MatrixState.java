@@ -30,6 +30,7 @@ public class MatrixState {
     //获取具体物体的总变换矩阵
     float[] mMVPMatrix = new float[16];//总变换矩阵
 
+    public boolean hasSettedCamera = false;
 
     public static ThreadLocal<MatrixState> threadLocals = new ThreadLocal<MatrixState>();
 
@@ -102,6 +103,8 @@ public class MatrixState {
         cameraPosBuf.position(0);
         cameraPosBuf.put(cameraPos);
         cameraPosBuf.position(0);
+
+        hasSettedCamera = true;
     }
 
     public FloatBuffer getCameraPosBuf() {

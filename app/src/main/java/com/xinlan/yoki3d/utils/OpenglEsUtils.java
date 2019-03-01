@@ -40,13 +40,20 @@ public class OpenglEsUtils {
         return bb;
     }
 
-    public static float[] convertColor(int r , int g , int b , int a){
+    public static float[] convertColor(float r , float g , float b , int a){
         float[] colors = new float[4];
         colors[0] = clamp(0.0f, 1.0f, r / 255);
         colors[1] = clamp(0.0f, 1.0f, g / 255);
         colors[2] = clamp(0.0f, 1.0f, b / 255);
         colors[3] = clamp(0.0f, 1.0f, a / 255);
         return colors;
+    }
+
+    public static void convertColor(float r , float g , float b , float a , float[] colors){
+        colors[0] = clamp(0.0f, 1.0f, r / 255);
+        colors[1] = clamp(0.0f, 1.0f, g / 255);
+        colors[2] = clamp(0.0f, 1.0f, b / 255);
+        colors[3] = clamp(0.0f, 1.0f, a / 255);
     }
 
     public static float clamp(float min, float max, float v) {

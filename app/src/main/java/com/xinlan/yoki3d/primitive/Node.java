@@ -39,6 +39,9 @@ public class Node implements IRender {
     }
 
     public void removeChild(final Node n) {
+        if (n == null)
+            return;
+
         mChildNodes.remove(n);
     }
 

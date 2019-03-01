@@ -23,4 +23,8 @@ public class Scene {
         CoreRender.getInstance().clearRenderList();
         mRoot.visit();
     }
+
+    public void removeChild(Node n){
+        mRoot.removeChild(n);
+    }
 }//end class

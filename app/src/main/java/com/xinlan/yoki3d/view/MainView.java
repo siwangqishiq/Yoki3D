@@ -76,6 +76,12 @@ public class MainView extends GLSurfaceView implements GLSurfaceView.Renderer, G
         }
     }
 
+    public void removeChild(Node node) {
+        if (mCurrentScene != null) {
+            mCurrentScene.removeChild(node);
+        }
+    }
+
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         mRender = CoreRender.getInstance();
@@ -95,9 +101,15 @@ public class MainView extends GLSurfaceView implements GLSurfaceView.Renderer, G
 
     @Override
     public void onDrawFrame(GL10 gl) {
+        if (mCustomAction != null) {
+            mCustomAction.beforeOnDraw(this);
+        }
         mCurrentScene.update();
 
         CoreRender.getInstance().render();
+        if (mCustomAction != null) {
+            mCustomAction.afterOnDraw(this);
+        }
         OpenglEsUtils.debugFps();
     }
 

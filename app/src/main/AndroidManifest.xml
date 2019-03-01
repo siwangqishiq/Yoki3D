@@ -18,6 +18,11 @@
         <activity
             android:name=".example.CustomObjActivity"
             android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".example.LineTestActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
