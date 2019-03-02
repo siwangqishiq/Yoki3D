@@ -2,14 +2,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#55ff0000"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#55ff0000"
     tools:context=".example.MainActivity">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+    <ToggleButton
+        android:id="@+id/toggle"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:checked="false"
+        android:textOff="关闭光照效果"
+        android:textOn="打开光照效果" />
 
+    <com.xinlan.yoki3d.view.MainView
+        android:id="@+id/mainView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toggle" />
 </RelativeLayout>

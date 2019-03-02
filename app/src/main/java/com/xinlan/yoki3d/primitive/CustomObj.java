@@ -31,6 +31,10 @@ public class CustomObj extends RenderNode {
 
     protected float x, y, z;
 
+    protected int mUnifromOpenLightLoc;
+
+    protected boolean mOpenLight = true;
+
     public CustomObj(String objFilename, int textureRes) {
         mProgramId = ShaderUtil.buildShaderProgram(R.raw.custom_obj_vertex, R.raw.custom_obj_frg);
         mUniformMvpMatrixLoc = GLES30.glGetUniformLocation(mProgramId, "uMvpMatrix");
@@ -38,6 +42,7 @@ public class CustomObj extends RenderNode {
         mUniformCameraPosLoc = GLES30.glGetUniformLocation(mProgramId, "uCameraPos");
         mUniformModelMatrixLoc = GLES30.glGetUniformLocation(mProgramId, "uModelMatrix");
         mUniformLightPosLoc = GLES30.glGetUniformLocation(mProgramId, "uLightPos");
+        mUnifromOpenLightLoc = GLES30.glGetUniformLocation(mProgramId, "uOpenLight");
 
         mObjData = LoadUtil.loadObjFromAsset(objFilename, YokiHelper.ctx.getResources());
 
@@ -48,6 +53,12 @@ public class CustomObj extends RenderNode {
         mTextureId = ShaderUtil.loadTexture(YokiHelper.ctx, textureRes);
 
         mNormalBuf = OpenglEsUtils.allocateBuf(mObjData.convertNormalListToArray());
+    }
+
+    public void setLightOpen(final boolean on){
+        if(on != mOpenLight){
+            mOpenLight = on;
+        }
     }
 
     public void setPosition(float _x, float _y, float _z) {
@@ -73,7 +84,7 @@ public class CustomObj extends RenderNode {
 
         GLES30.glUniform3fv(mUniformCameraPosLoc, 1, MatrixState.getInstance().getCameraPosBuf());
         GLES30.glUniform3fv(mUniformLightPosLoc, 1, MatrixState.getInstance().getPointLightPosBuf());
-
+        GLES30.glUniform1ui(mUnifromOpenLightLoc, mOpenLight ? 1 : 0);
 
         GLES30.glVertexAttribPointer(0, 3, GLES30.GL_FLOAT, false, 3 * 4, mVertexBuf);
         GLES30.glEnableVertexAttribArray(0);

@@ -3,6 +3,7 @@
 precision mediump float;
 
 uniform sampler2D uTexture;
+uniform bool uOpenLight;
 
 in vec2 vCoord;
 in vec4 vAmbient;
@@ -14,5 +15,10 @@ out vec4 fragColor;
 void main(){
     //fragColor = vec4(1.0f , 1.0f , 0.0f , 1.0f);
     vec4 color = texture(uTexture , vCoord);
-    fragColor = vAmbient * color + vDiffuse * color + vSpecular * color;
+
+    if(uOpenLight){
+        fragColor = vAmbient * color + vDiffuse * color + vSpecular * color;
+    }else{
+        fragColor = color;
+    }
 }
