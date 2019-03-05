@@ -38,7 +38,7 @@ public class SphereActivity extends Activity implements ViewCallback {
     public void init(MainView ctx) {
         MatrixState.getInstance().setPointLightPos(100,100,0);
 
-        Sphere planet = new Sphere(2);
+        Sphere planet = new Sphere(4);
         planet.setPosition(0,0,-10);
         ctx.addChild(planet);
     }

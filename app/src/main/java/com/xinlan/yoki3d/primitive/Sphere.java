@@ -120,9 +120,9 @@ public class Sphere extends RenderNode {
         GLES30.glVertexAttribPointer(0, 3, GLES30.GL_FLOAT, false, 3 * 4, mVertexBuf);
         GLES30.glEnableVertexAttribArray(0);
 
-        GLES30.glVertexAttribPointer(1, 2, GLES30.GL_FLOAT, false, 3 * 4, mVertexBuf);
+        GLES30.glVertexAttribPointer(1, 3, GLES30.GL_FLOAT, false, 3 * 4, mVertexBuf);
         GLES30.glEnableVertexAttribArray(1);
-        
+
         GLES30.glDrawArrays(GLES20.GL_TRIANGLES, 0, mVertexCount);
         MatrixState.getInstance().popMatrix();
     }
