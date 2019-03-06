@@ -47,6 +47,8 @@ public class Triangle extends RenderNode {
     public void render() {
         GLES30.glUseProgram(mProgramId);
 
+
+
     }
 
 }//end class

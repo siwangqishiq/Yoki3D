@@ -16,7 +16,7 @@ out vec4 vAmbient;
 out vec4 vDiffuse;
 out vec4 vSpecular;
 
-const float shininess = 0.0;//粗糙度
+const float shininess = 30.0;//粗糙度
 
 void pointLight(in vec3 normal,
                 in vec4 ambient ,

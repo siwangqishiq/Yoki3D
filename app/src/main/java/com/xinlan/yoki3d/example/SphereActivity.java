@@ -112,9 +112,12 @@ public class SphereActivity extends Activity implements ViewCallback {
         mMainView.onResume();
     }
 
+    private float y = 0;
+    private float time = 0;
+
     @Override
     public void init(MainView ctx) {
-        MatrixState.getInstance().setPointLightPos(200, 200, 0);
+        MatrixState.getInstance().setPointLightPos(0, 10, -5);
 
         planet = new Sphere(4);
         planet.setPosition(0, 0, -15);
@@ -123,7 +126,9 @@ public class SphereActivity extends Activity implements ViewCallback {
 
     @Override
     public void beforeOnDraw(MainView ctx) {
-
+        y = 1 * (float) Math.sin(time);
+        time += 0.03f;
+        planet.setPosition(0, y, -15);
     }
 
     @Override

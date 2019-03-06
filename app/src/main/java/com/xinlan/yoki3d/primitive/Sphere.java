@@ -31,9 +31,9 @@ public class Sphere extends RenderNode {
     protected int mUDiffuseLightLoc;
     protected int mUSpecularLightLoc;
 
-    protected float mAmbient = 0.4f;
-    protected float mDiffuse = 0.85f;
-    protected float mSpecular = 0.2f;
+    protected float mAmbient = 0.2f;
+    protected float mDiffuse = 0.6f;
+    protected float mSpecular = 0.4f;
 
     public Sphere(float radius) {
         this.mRadius = radius;

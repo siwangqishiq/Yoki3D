@@ -43,10 +43,10 @@ public class Sphere2Activity extends Activity implements ViewCallback {
 
     @Override
     public void init(MainView ctx) {
-        MatrixState.getInstance().setPointLightPos(200, 200, 0);
+        MatrixState.getInstance().setPointLightPos(0, 200, 0);
 
         planet = new Sphere(4);
-        planet.setPosition(0, 0, -15);
+        planet.setPosition(0, 0, -10);
         ctx.addChild(planet);
     }
 
