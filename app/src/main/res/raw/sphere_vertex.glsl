@@ -5,6 +5,10 @@ uniform mat4 uModelMatrix;
 uniform vec3 uLightPos;
 uniform vec3 uCameraPos;
 
+uniform float uAmbientLight;
+uniform float uDiffuseLight;
+uniform float uSepcularLight;
+
 layout(location = 0) in vec3 aPos;
 layout(location = 1) in vec3 aNormal;
 
@@ -12,7 +16,7 @@ out vec4 vAmbient;
 out vec4 vDiffuse;
 out vec4 vSpecular;
 
-const float shininess = 50.0;//粗糙度
+const float shininess = 0.0;//粗糙度
 
 void pointLight(in vec3 normal,
                 in vec4 ambient ,
@@ -45,9 +49,9 @@ void main(){
     vec4 specularTmp;
 
     pointLight(aNormal,
-                vec4(0.15f,0.15f,0.15f,1.0f),
-                vec4(0.4f,0.4f,0.4f,1.0f),
-                vec4(0.9f,0.9f,0.9f,1.0f),
+                vec4(uAmbientLight,uAmbientLight,uAmbientLight,1.0f),
+                vec4(uDiffuseLight,uDiffuseLight,uDiffuseLight,1.0f),
+                vec4(uSepcularLight,uSepcularLight,uSepcularLight,1.0f),
                 ambientTmp,
                 diffuseTmp,
                 specularTmp

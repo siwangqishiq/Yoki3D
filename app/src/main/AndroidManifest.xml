@@ -12,13 +12,11 @@
 
         <activity
             android:name=".example.MainActivity"
-            android:screenOrientation="landscape">
-        </activity>
+            android:screenOrientation="landscape"></activity>
 
         <activity
             android:name=".example.CustomObjActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
 
         <activity
             android:name=".example.LineTestActivity"
@@ -28,7 +26,11 @@
 
         <activity
             android:name=".example.SphereActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".example.Sphere2Activity"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

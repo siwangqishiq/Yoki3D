@@ -27,17 +27,42 @@ public class Sphere extends RenderNode {
     protected FloatBuffer mVertexBuf;
     protected int mVertexCount;
 
+    protected int mUAmbientLightLoc;
+    protected int mUDiffuseLightLoc;
+    protected int mUSpecularLightLoc;
+
+    protected float mAmbient = 0.4f;
+    protected float mDiffuse = 0.85f;
+    protected float mSpecular = 0.2f;
+
     public Sphere(float radius) {
         this.mRadius = radius;
         initShader();
         initVertex();
     }
 
-
     public void setPosition(float x, float y, float z) {
         mCenter.x = x;
         mCenter.y = y;
         mCenter.z = z;
+    }
+
+    public void setLightStrength(float ambient, float diffuse, float specular) {
+        mAmbient = ambient;
+        mDiffuse = diffuse;
+        mSpecular = specular;
+    }
+
+    public void setAmbientLightStrength(float ambient) {
+        mAmbient = ambient;
+    }
+
+    public void setDiffuseLightStrength(float diffuse) {
+        mDiffuse = diffuse;
+    }
+
+    public void setSpecularLightStrength(float specular) {
+        mSpecular = specular;
     }
 
     protected void initShader() {
@@ -46,6 +71,10 @@ public class Sphere extends RenderNode {
         mUniformCameraPosLoc = GLES30.glGetUniformLocation(mProgramId, "uCameraPos");
         mUniformModelMatrixLoc = GLES30.glGetUniformLocation(mProgramId, "uModelMatrix");
         mUniformLightPosLoc = GLES30.glGetUniformLocation(mProgramId, "uLightPos");
+
+        mUAmbientLightLoc = GLES30.glGetUniformLocation(mProgramId, "uAmbientLight");
+        mUDiffuseLightLoc = GLES30.glGetUniformLocation(mProgramId, "uDiffuseLight");
+        mUSpecularLightLoc = GLES30.glGetUniformLocation(mProgramId, "uSepcularLight");
     }
 
     protected void initVertex() {
@@ -116,6 +145,10 @@ public class Sphere extends RenderNode {
                 MatrixState.getInstance().getMMatrix(), 0);
         GLES30.glUniform3fv(mUniformCameraPosLoc, 1, MatrixState.getInstance().getCameraPosBuf());
         GLES30.glUniform3fv(mUniformLightPosLoc, 1, MatrixState.getInstance().getPointLightPosBuf());
+
+        GLES30.glUniform1f(mUAmbientLightLoc, mAmbient);
+        GLES30.glUniform1f(mUDiffuseLightLoc, mDiffuse);
+        GLES30.glUniform1f(mUSpecularLightLoc, mSpecular);
 
         GLES30.glVertexAttribPointer(0, 3, GLES30.GL_FLOAT, false, 3 * 4, mVertexBuf);
         GLES30.glEnableVertexAttribArray(0);
