@@ -8,7 +8,6 @@ import com.xinlan.yoki3d.R;
 import com.xinlan.yoki3d.utils.OpenglEsUtils;
 import com.xinlan.yoki3d.utils.ShaderUtil;
 
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 public class Line extends RenderNode {
@@ -21,11 +20,20 @@ public class Line extends RenderNode {
     protected float mLineWidth = 1;
 
     public Line() {
-        mPointBuf = OpenglEsUtils.allocateBuf(mPoints);
-        mProgramId = ShaderUtil.buildShaderProgram(R.raw.line_vertex, R.raw.line_frg);
+        initShader();
+        initVertex();
+    }
 
+    @Override
+    void initShader() {
+        mProgramId = ShaderUtil.buildShaderProgram(R.raw.line_vertex, R.raw.line_frg);
         mUnifromColorLoc = GLES30.glGetUniformLocation(mProgramId, "uColor");
-        mUniformMvpMatrixLoc = GLES30.glGetUniformLocation(mProgramId, "uMvpMatrix");
+        mUMvpMatrixLoc = GLES30.glGetUniformLocation(mProgramId, "uMvpMatrix");
+    }
+
+    @Override
+    void initVertex() {
+        mPointBuf = OpenglEsUtils.allocateBuf(mPoints);
     }
 
     public void setPoints(float startX, float startY, float startZ,
@@ -51,7 +59,7 @@ public class Line extends RenderNode {
     public void render() {
 
         GLES30.glUseProgram(mProgramId);
-        GLES30.glUniformMatrix4fv(mUniformMvpMatrixLoc, 1, false,
+        GLES30.glUniformMatrix4fv(mUMvpMatrixLoc, 1, false,
                 MatrixState.getInstance().getFinalMatrix(), 0);
         GLES30.glVertexAttribPointer(0, 3, GLES30.GL_FLOAT, false, 3 * 4, mPointBuf);
         GLES30.glEnableVertexAttribArray(0);
@@ -60,4 +68,6 @@ public class Line extends RenderNode {
         GLES30.glDrawArrays(GLES20.GL_LINES, 0, 2);
         GLES30.glLineWidth(1.0f);
     }
+
+
 }//end class

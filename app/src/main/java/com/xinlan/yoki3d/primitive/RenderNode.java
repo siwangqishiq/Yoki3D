@@ -3,11 +3,16 @@ package com.xinlan.yoki3d.primitive;
 /**
  *
  */
-public class RenderNode extends Node {
+public abstract class RenderNode extends Node {
     protected int mProgramId;
-    protected int mUniformMvpMatrixLoc;
-    protected int mUniformTextureLoc;
-    protected int mUniformCameraPosLoc;
-    protected int mUniformModelMatrixLoc;
-    protected int mUniformLightPosLoc;
+    protected int mUMvpMatrixLoc;
+    protected int mUTextureLoc;
+    protected int mUCameraPosLoc;
+    protected int mUModelMatrixLoc;
+    protected int mULightPosLoc;
+
+    abstract void initShader();
+
+    abstract void initVertex();
+
 }//end class

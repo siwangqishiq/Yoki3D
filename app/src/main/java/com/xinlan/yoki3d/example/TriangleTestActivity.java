@@ -8,6 +8,7 @@ import android.view.WindowManager;
 import com.xinlan.yoki3d.MatrixState;
 import com.xinlan.yoki3d.YokiHelper;
 import com.xinlan.yoki3d.primitive.Line;
+import com.xinlan.yoki3d.primitive.Triangle;
 import com.xinlan.yoki3d.view.MainView;
 import com.xinlan.yoki3d.view.ViewCallback;
 
@@ -41,43 +42,20 @@ public class TriangleTestActivity extends Activity implements ViewCallback {
         mMainView.onResume();
     }
 
-    Line line1 = null;
-    Line line2 = null;
-    int frame;
-
     @Override
     public void init(MainView ctx) {
-        MatrixState.getInstance().setCamera(0, 0, 0,
-                0, 0, 1, 0, 1, 0);
+        Triangle t1 = new Triangle();
+        t1.setColor(0 , 255 , 255 , 255);
+        t1.setTriangle( 0, 0 , -1,
+                0 , 1, -1 ,
+                1, 0 , -1);
+        ctx.addChild(t1);
 
-        line1 = new Line();
-        line1.setColor(255, 0, 0, 255);
-        line1.setPoints(0, 0, 4,
-                1, 1, 4);
-        ctx.addChild(line1);
-
-        line2 = new Line();
-        line2.setColor(0, 255, 0, 255);
-        line2.setPoints(0, 0, 4,
-                -1, 1, 4);
-        ctx.addChild(line2);
     }
 
     @Override
     public void beforeOnDraw(MainView ctx) {
-        if (frame % 2 == 0) {
-            ctx.removeChild(line2);
-            line2.setColor(255, 0, 0, 255);
-        } else {
-            ctx.addChild(line2);
-            line2.setColor(255, 255, 255, 255);
-        }
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        frame++;
+
     }
 
     @Override

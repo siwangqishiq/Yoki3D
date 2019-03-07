@@ -5,4 +5,13 @@ public class Rect extends RenderNode{
 
     }
 
+    @Override
+    void initShader() {
+
+    }
+
+    @Override
+    void initVertex() {
+
+    }
 }//end class

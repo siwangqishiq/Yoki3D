@@ -35,28 +35,19 @@ public class CustomObj extends RenderNode {
 
     protected boolean mOpenLight = true;
 
+    protected String mObjFileName;
+    protected int mTextureRes;
+
     public CustomObj(String objFilename, int textureRes) {
-        mProgramId = ShaderUtil.buildShaderProgram(R.raw.custom_obj_vertex, R.raw.custom_obj_frg);
-        mUniformMvpMatrixLoc = GLES30.glGetUniformLocation(mProgramId, "uMvpMatrix");
-        mUniformTextureLoc = GLES30.glGetUniformLocation(mProgramId, "uTexture");
-        mUniformCameraPosLoc = GLES30.glGetUniformLocation(mProgramId, "uCameraPos");
-        mUniformModelMatrixLoc = GLES30.glGetUniformLocation(mProgramId, "uModelMatrix");
-        mUniformLightPosLoc = GLES30.glGetUniformLocation(mProgramId, "uLightPos");
-        mUnifromOpenLightLoc = GLES30.glGetUniformLocation(mProgramId, "uOpenLight");
+        mObjFileName = objFilename;
+        mTextureRes = textureRes;
 
-        mObjData = LoadUtil.loadObjFromAsset(objFilename, YokiHelper.ctx.getResources());
-
-        mVertexBuf = OpenglEsUtils.allocateBuf(mObjData.convertVertexListToArray());
-        mVertexCount = mObjData.vertexList.size();
-
-        mCoordBuf = OpenglEsUtils.allocateBuf(mObjData.convertTextureCoordListToArray());
-        mTextureId = ShaderUtil.loadTexture(YokiHelper.ctx, textureRes);
-
-        mNormalBuf = OpenglEsUtils.allocateBuf(mObjData.convertNormalListToArray());
+        initShader();
+        initVertex();
     }
 
-    public void setLightOpen(final boolean on){
-        if(on != mOpenLight){
+    public void setLightOpen(final boolean on) {
+        if (on != mOpenLight) {
             mOpenLight = on;
         }
     }
@@ -76,14 +67,14 @@ public class CustomObj extends RenderNode {
         MatrixState.getInstance().rotate(CoreRender.getInstance().yAngle, 0, 1, 0);
         MatrixState.getInstance().rotate(CoreRender.getInstance().xAngle, 1, 0, 0);
 
-        GLES30.glUniformMatrix4fv(mUniformMvpMatrixLoc, 1, false,
+        GLES30.glUniformMatrix4fv(mUMvpMatrixLoc, 1, false,
                 MatrixState.getInstance().getFinalMatrix(), 0);
 
-        GLES30.glUniformMatrix4fv(mUniformModelMatrixLoc, 1, false,
+        GLES30.glUniformMatrix4fv(mUModelMatrixLoc, 1, false,
                 MatrixState.getInstance().getMMatrix(), 0);
 
-        GLES30.glUniform3fv(mUniformCameraPosLoc, 1, MatrixState.getInstance().getCameraPosBuf());
-        GLES30.glUniform3fv(mUniformLightPosLoc, 1, MatrixState.getInstance().getPointLightPosBuf());
+        GLES30.glUniform3fv(mUCameraPosLoc, 1, MatrixState.getInstance().getCameraPosBuf());
+        GLES30.glUniform3fv(mULightPosLoc, 1, MatrixState.getInstance().getPointLightPosBuf());
         GLES30.glUniform1ui(mUnifromOpenLightLoc, mOpenLight ? 1 : 0);
 
         GLES30.glVertexAttribPointer(0, 3, GLES30.GL_FLOAT, false, 3 * 4, mVertexBuf);
@@ -97,9 +88,33 @@ public class CustomObj extends RenderNode {
 
         GLES30.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, mTextureId);
-        GLES30.glUniform1ui(mUniformTextureLoc, 0);
+        GLES30.glUniform1ui(mUTextureLoc, 0);
 
         GLES30.glDrawArrays(GLES20.GL_TRIANGLES, 0, mVertexCount);
         MatrixState.getInstance().popMatrix();
+    }
+
+    @Override
+    void initShader() {
+        mProgramId = ShaderUtil.buildShaderProgram(R.raw.custom_obj_vertex, R.raw.custom_obj_frg);
+        mUMvpMatrixLoc = GLES30.glGetUniformLocation(mProgramId, "uMvpMatrix");
+        mUTextureLoc = GLES30.glGetUniformLocation(mProgramId, "uTexture");
+        mUCameraPosLoc = GLES30.glGetUniformLocation(mProgramId, "uCameraPos");
+        mUModelMatrixLoc = GLES30.glGetUniformLocation(mProgramId, "uModelMatrix");
+        mULightPosLoc = GLES30.glGetUniformLocation(mProgramId, "uLightPos");
+        mUnifromOpenLightLoc = GLES30.glGetUniformLocation(mProgramId, "uOpenLight");
+    }
+
+    @Override
+    void initVertex() {
+        mObjData = LoadUtil.loadObjFromAsset(mObjFileName, YokiHelper.ctx.getResources());
+
+        mVertexBuf = OpenglEsUtils.allocateBuf(mObjData.convertVertexListToArray());
+        mVertexCount = mObjData.vertexList.size();
+
+        mCoordBuf = OpenglEsUtils.allocateBuf(mObjData.convertTextureCoordListToArray());
+        mTextureId = ShaderUtil.loadTexture(YokiHelper.ctx, mTextureRes);
+
+        mNormalBuf = OpenglEsUtils.allocateBuf(mObjData.convertNormalListToArray());
     }
 }//end class

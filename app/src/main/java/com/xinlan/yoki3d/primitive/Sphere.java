@@ -5,15 +5,11 @@ import android.opengl.GLES30;
 
 import com.xinlan.yoki3d.MatrixState;
 import com.xinlan.yoki3d.R;
-import com.xinlan.yoki3d.YokiHelper;
-import com.xinlan.yoki3d.model.ObjData;
 import com.xinlan.yoki3d.model.Vec3;
 import com.xinlan.yoki3d.render.CoreRender;
-import com.xinlan.yoki3d.utils.LoadUtil;
 import com.xinlan.yoki3d.utils.OpenglEsUtils;
 import com.xinlan.yoki3d.utils.ShaderUtil;
 
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
@@ -65,18 +61,20 @@ public class Sphere extends RenderNode {
         mSpecular = specular;
     }
 
+    @Override
     protected void initShader() {
         mProgramId = ShaderUtil.buildShaderProgram(R.raw.sphere_vertex, R.raw.sphere_frg);
-        mUniformMvpMatrixLoc = GLES30.glGetUniformLocation(mProgramId, "uMvpMatrix");
-        mUniformCameraPosLoc = GLES30.glGetUniformLocation(mProgramId, "uCameraPos");
-        mUniformModelMatrixLoc = GLES30.glGetUniformLocation(mProgramId, "uModelMatrix");
-        mUniformLightPosLoc = GLES30.glGetUniformLocation(mProgramId, "uLightPos");
+        mUMvpMatrixLoc = GLES30.glGetUniformLocation(mProgramId, "uMvpMatrix");
+        mUCameraPosLoc = GLES30.glGetUniformLocation(mProgramId, "uCameraPos");
+        mUModelMatrixLoc = GLES30.glGetUniformLocation(mProgramId, "uModelMatrix");
+        mULightPosLoc = GLES30.glGetUniformLocation(mProgramId, "uLightPos");
 
         mUAmbientLightLoc = GLES30.glGetUniformLocation(mProgramId, "uAmbientLight");
         mUDiffuseLightLoc = GLES30.glGetUniformLocation(mProgramId, "uDiffuseLight");
         mUSpecularLightLoc = GLES30.glGetUniformLocation(mProgramId, "uSepcularLight");
     }
 
+    @Override
     protected void initVertex() {
         ArrayList<Float> alVertix = new ArrayList<Float>();//存放顶点坐标的ArrayList
         final float angleSpan = 10f;//将球进行单位切分的角度
@@ -139,12 +137,12 @@ public class Sphere extends RenderNode {
         MatrixState.getInstance().rotate(CoreRender.getInstance().yAngle,
                 0, 1, 0);
 
-        GLES30.glUniformMatrix4fv(mUniformMvpMatrixLoc, 1, false,
+        GLES30.glUniformMatrix4fv(mUMvpMatrixLoc, 1, false,
                 MatrixState.getInstance().getFinalMatrix(), 0);
-        GLES30.glUniformMatrix4fv(mUniformModelMatrixLoc, 1, false,
+        GLES30.glUniformMatrix4fv(mUModelMatrixLoc, 1, false,
                 MatrixState.getInstance().getMMatrix(), 0);
-        GLES30.glUniform3fv(mUniformCameraPosLoc, 1, MatrixState.getInstance().getCameraPosBuf());
-        GLES30.glUniform3fv(mUniformLightPosLoc, 1, MatrixState.getInstance().getPointLightPosBuf());
+        GLES30.glUniform3fv(mUCameraPosLoc, 1, MatrixState.getInstance().getCameraPosBuf());
+        GLES30.glUniform3fv(mULightPosLoc, 1, MatrixState.getInstance().getPointLightPosBuf());
 
         GLES30.glUniform1f(mUAmbientLightLoc, mAmbient);
         GLES30.glUniform1f(mUDiffuseLightLoc, mDiffuse);

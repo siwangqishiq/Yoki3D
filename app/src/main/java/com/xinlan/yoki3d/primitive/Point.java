@@ -21,11 +21,20 @@ public class Point extends RenderNode{
 
 
     public Point(){
+        initVertex();
+        initShader();
+    }
+
+    @Override
+    void initShader() {
+        mProgramId = ShaderUtil.buildShaderProgram(R.raw.point_vertex , R.raw.point_frg);
+        mUMvpMatrixLoc = GLES30.glGetUniformLocation(mProgramId , "uMvpMatrix");
+    }
+
+    @Override
+    void initVertex() {
         mColorBuf = OpenglEsUtils.allocateBuf(mColors);
         mPositionBuf = OpenglEsUtils.allocateBuf(mPosition);
-
-        mProgramId = ShaderUtil.buildShaderProgram(R.raw.point_vertex , R.raw.point_frg);
-        mUniformMvpMatrixLoc = GLES30.glGetUniformLocation(mProgramId , "uMvpMatrix");
     }
 
     public void setColor(int r,int g, int b){
@@ -57,7 +66,7 @@ public class Point extends RenderNode{
     @Override
     public void render() {
         GLES30.glUseProgram(mProgramId);
-        GLES30.glUniformMatrix4fv(mUniformMvpMatrixLoc ,
+        GLES30.glUniformMatrix4fv(mUMvpMatrixLoc,
                 1 , false , MatrixState.getInstance().getFinalMatrix() , 0);
         GLES30.glVertexAttribPointer(0 ,4 ,  GLES20.GL_FLOAT , false , 0 , mColorBuf);
         GLES30.glEnableVertexAttribArray(0);
@@ -67,5 +76,6 @@ public class Point extends RenderNode{
 
         GLES30.glDrawArrays(GLES30.GL_POINTS , 0 , 1);
     }
+
 
 }//end class
