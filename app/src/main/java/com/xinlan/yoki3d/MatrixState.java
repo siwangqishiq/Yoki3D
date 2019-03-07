@@ -148,6 +148,14 @@ public class MatrixState {
         return mMVPMatrix;
     }
 
+    public float[] getFinalMatrix(float[] modelMatrix) {
+        //摄像机矩阵乘以变换矩阵
+        Matrix.multiplyMM(mMVPMatrix, 0, mVMatrix, 0, modelMatrix, 0);
+        //投影矩阵乘以上一步的结果矩阵
+        Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mMVPMatrix, 0);
+        return mMVPMatrix;
+    }
+
     //获取具体物体的变换矩阵
     public float[] getMMatrix() {
         return currMatrix;

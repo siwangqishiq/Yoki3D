@@ -40,7 +40,7 @@ public class OpenglEsUtils {
         return bb;
     }
 
-    public static float[] convertColor(float r , float g , float b , int a){
+    public static float[] convertColor(float r, float g, float b, int a) {
         float[] colors = new float[4];
         colors[0] = clamp(0.0f, 1.0f, r / 255);
         colors[1] = clamp(0.0f, 1.0f, g / 255);
@@ -49,7 +49,7 @@ public class OpenglEsUtils {
         return colors;
     }
 
-    public static void convertColor(float r , float g , float b , float a , float[] colors){
+    public static void convertColor(float r, float g, float b, float a, float[] colors) {
         colors[0] = clamp(0.0f, 1.0f, r / 255);
         colors[1] = clamp(0.0f, 1.0f, g / 255);
         colors[2] = clamp(0.0f, 1.0f, b / 255);
@@ -57,11 +57,20 @@ public class OpenglEsUtils {
     }
 
     public static float clamp(float min, float max, float v) {
-        if(v <= min)
+        if (v <= min)
             return min;
-        if(v >= max)
+        if (v >= max)
             return max;
         return v;
+    }
+
+    public static void debugPrintMat(float[] m) {
+        System.out.println(m[0] + " " +m[1] +" " + m[2] +" " + m[3]);
+        System.out.println(m[4] + " " +m[5] +" " + m[6] +" " + m[7]);
+        System.out.println(m[8] + " " +m[9] +" " + m[10] +" " + m[11]);
+        System.out.println(m[12] + " " +m[13] +" " + m[14] +" " + m[15]);
+
+
     }
 
 }//end class

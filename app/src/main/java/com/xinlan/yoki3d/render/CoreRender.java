@@ -63,7 +63,7 @@ public final class CoreRender {
     public void onCreate() {
         GLES30.glClearColor(mRefreshColorR, mRefreshColorG, mRefreshColorB, mRefreshColorA);
         GLES30.glEnable(GLES20.GL_DEPTH_TEST);//打开深度测试
-        //GLES30.glEnable(GLES30.GL_CULL_FACE);//背面裁剪
+        // GLES30.glEnable(GLES30.GL_CULL_FACE);//背面裁剪
     }
 
     public void onViewResize(int w, int h) {
@@ -73,8 +73,8 @@ public final class CoreRender {
         mRatio = (float) mViewWidth / mViewHeight;
 
         if (!MatrixState.getInstance().hasSettedCamera) {
-            MatrixState.getInstance().setCamera(0, 0, 0,
-                    0, 0, -1,
+            MatrixState.getInstance().setCamera(0, 0, 1,
+                    0, 0, 0,
                     0, 1, 0);
         }
 

@@ -90,8 +90,11 @@ public class Triangle extends RenderNode {
 
         GLES30.glUniform4fv(mUColorLoc, 1, mColor, 0);
 
+        System.out.println(mName + " : ");
+        OpenglEsUtils.debugPrintMat(getModelMatrix());
+
         GLES30.glUniformMatrix4fv(mUMvpMatrixLoc, 1, false,
-                MatrixState.getInstance().getFinalMatrix(), 0);
+                MatrixState.getInstance().getFinalMatrix(getModelMatrix()), 0);
 
         GLES30.glDrawArrays(GLES20.GL_TRIANGLES, 0, 3);
         MatrixState.getInstance().popMatrix();

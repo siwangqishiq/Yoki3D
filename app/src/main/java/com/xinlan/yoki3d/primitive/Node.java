@@ -1,5 +1,7 @@
 package com.xinlan.yoki3d.primitive;
 
+import android.opengl.Matrix;
+
 import com.xinlan.yoki3d.render.CoreRender;
 import com.xinlan.yoki3d.render.IRender;
 
@@ -22,8 +24,41 @@ public class Node implements IRender {
     protected int mNextInsertIndex = 0;
     protected int mStatus = NODE_STATUS_NORMAL;
 
+    public float[] mModelMatrix = new float[4 * 4];//存贮节点变换的矩阵 model Matrix
+
     public Node() {
         mChildNodes = new LinkedList();
+        Matrix.setIdentityM(mModelMatrix, 0);
+    }
+
+    public void scale(float scale) {
+        Matrix.scaleM(mModelMatrix, 0, scale, scale, scale);
+        adjustChildMatrix(mModelMatrix);
+    }
+
+    public void translate(float x, float y, float z) {
+        Matrix.translateM(mModelMatrix, 0, x, y, z);
+        adjustChildMatrix(mModelMatrix);
+    }
+
+    public void rotate(float x, float y, float z, float angle) {
+        Matrix.rotateM(mModelMatrix, 0, angle, x, y, z);
+        adjustChildMatrix(mModelMatrix);
+    }
+
+    public void adjustChildMatrix(float[] parentMat) {
+        if (mChildNodes != null && mChildNodes.size() > 0) {
+            for (Node node : mChildNodes) {
+                //Matrix.setIdentityM(node.mModelMatrix, 0);
+                Matrix.multiplyMM(node.mModelMatrix, 0, parentMat, 0,
+                        node.mModelMatrix, 0);
+                node.adjustChildMatrix(parentMat);
+            }//end for each
+        }
+    }
+
+    public float[] getModelMatrix() {
+        return mModelMatrix;
     }
 
     public void setNodeName(String name) {
