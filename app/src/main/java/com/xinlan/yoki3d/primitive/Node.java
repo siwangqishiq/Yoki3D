@@ -52,7 +52,7 @@ public class Node implements IRender {
                 //Matrix.setIdentityM(node.mModelMatrix, 0);
                 Matrix.multiplyMM(node.mModelMatrix, 0, parentMat, 0,
                         node.mModelMatrix, 0);
-                node.adjustChildMatrix(parentMat);
+                //node.adjustChildMatrix(parentMat);
             }//end for each
         }
     }

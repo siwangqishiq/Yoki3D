@@ -42,7 +42,6 @@ public class Triangle extends RenderNode {
         mPoints[7] = y3;
         mPoints[8] = z3;
 
-
         mPointBuf.position(0);
         mPointBuf.put(x1);
         mPointBuf.put(y1);
@@ -79,10 +78,6 @@ public class Triangle extends RenderNode {
     public void render() {
         MatrixState.getInstance().pushMatrix();
 
-        //绕Y轴、X轴旋转
-        //MatrixState.getInstance().rotate(CoreRender.getInstance().yAngle, mPoints[0], mPoints[1], mPoints[2]);
-        //MatrixState.getInstance().rotate(CoreRender.getInstance().xAngle, mPoints[3], mPoints[4], mPoints[5]);
-
         GLES30.glUseProgram(mProgramId);
 
         GLES30.glVertexAttribPointer(0, 3, GLES30.GL_FLOAT, false, 3 * 4, mPointBuf);
@@ -90,7 +85,7 @@ public class Triangle extends RenderNode {
 
         GLES30.glUniform4fv(mUColorLoc, 1, mColor, 0);
 
-        System.out.println(mName + " : ");
+        // System.out.println(mName + " : ");
         OpenglEsUtils.debugPrintMat(getModelMatrix());
 
         GLES30.glUniformMatrix4fv(mUMvpMatrixLoc, 1, false,

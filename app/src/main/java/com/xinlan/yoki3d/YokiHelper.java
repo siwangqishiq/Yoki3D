@@ -32,4 +32,5 @@ public class YokiHelper {
             frameLayout.addView(view, params);
         }
     }
+
 }//end class
